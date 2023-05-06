@@ -7,13 +7,14 @@ require_relative 'preferred_locale/auto_locale' if defined?(Rails)
 class PreferredLocale
   def initialize(available: [])
     # We need this to avoid overwriting explicit options with implicit ones
-    available_lower = available.map(&:downcase)
+    available_lower = available.map { |locale| locale.to_s.downcase }
 
     # Create a map of "implicit" available locales to their "canonical" form
     @available = available.each_with_object({}) do |locale, obj|
-      obj[locale.downcase] = locale
+      locale_str = locale.to_s
+      obj[locale_str.downcase] = locale
       # Add the language without a country if it's not already in the list
-      language = locale.downcase.split('-')[0]
+      language = locale_str.downcase.split('-')[0]
       obj[language] = locale unless available_lower.include?(language)
     end
   end
@@ -21,7 +22,7 @@ class PreferredLocale
   def acceptable_for(locales: [])
     # Build a candidate list including our implicit candidate locales
     candidates = locales.flat_map do |locale|
-      [locale.downcase, locale.split('-')[0].downcase]
+      [locale.to_s.downcase, locale.to_s.split('-')[0].downcase]
     end
 
     # Figure out which candidates are available
