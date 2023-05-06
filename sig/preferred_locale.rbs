@@ -6,4 +6,18 @@ class PreferredLocale
   def acceptable_for: (locales: Array[String]) -> Array[String]
 
   def preferred_for: (locales: Array[String]) -> String | nil
+
+  class HeaderParser
+    def initialize: (header: String) -> void
+
+    def raw_locales: () -> Array[String]
+
+    def preferred_locales: () -> Array[String]
+  end
+
+  module AutoLocale
+    def preferred_locale: () -> String
+
+    def set_locale: () -> void
+  end
 end
