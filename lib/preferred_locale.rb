@@ -20,9 +20,15 @@ class PreferredLocale
   end
 
   def acceptable_for(locales: [])
+    locales_lower = locales.map { |locale| locale.to_s.downcase }
     # Build a candidate list including our implicit candidate locales
-    candidates = locales.flat_map do |locale|
-      [locale.to_s.downcase, locale.to_s.split('-')[0].downcase]
+    candidates = locales_lower.flat_map do |locale|
+      language = locale.split('-')[0]
+      [
+        locale,
+        # Add the language without a country if it's not already in the list
+        (language unless locales_lower.include?(language))
+      ].compact
     end
 
     # Figure out which candidates are available
