@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_support/concern'
-require_relative 'preferred_locale/header_parser'
 
 class PreferredLocale
   module AutoLocale

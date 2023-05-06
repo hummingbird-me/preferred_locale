@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'preferred_locale/version'
+require_relative 'preferred_locale/header_parser'
+require_relative 'preferred_locale/auto_locale' if defined?(Rails)
 
 class PreferredLocale
   def initialize(available: [])
