@@ -30,13 +30,13 @@ preferred_locale = PreferredLocale.new(available: ['en', 'fr', 'es'])
 Then, you can find the available locales from a given list of locales from the user:
 
 ```ruby
-preferred_locale.acceptable_for(['en-US', 'fr', 'ja-JP']) # => ['en', 'fr']
+preferred_locale.acceptable_for(locales: ['en-US', 'fr', 'ja-JP']) # => ['en', 'fr']
 ```
 
 Or you can just get the best one:
 
 ```ruby
-preferred_locale.preferred_for(['en-US', 'fr', 'ja-JP']) # => 'en'
+preferred_locale.preferred_for(locales: ['en-US', 'fr', 'ja-JP']) # => 'en'
 ```
 
 ### With Rails
