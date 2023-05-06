@@ -5,6 +5,42 @@ practice, this usually means finding the best locale between `I18n.available_loc
 `Accept-Language` header from the request, but it could also be used to find the best locale between
 something in your database and a user's preferences.
 
+This is similar to the [http_accept_language gem](https://github.com/iain/http_accept_language) and
+the [preferred-locale JS library](https://github.com/wopian/preferred-locale) in that it attempts to
+resolve mismatches in specificity (ie, `en-US` vs `en`), but differs slightly in algorithm and in
+API design.
+
+## Algorithm
+
+For available locales from the application:
+
+1. Start with available locales:
+   - `['en-US', 'pt-BR', 'ja-JP', 'pt']`
+2. Normalize them to lowercase mapped to the original values:
+   - `{'en-us' => 'en-US', 'pt-br' => 'pt-BR', 'ja-jp' => 'ja-JP', 'pt' => 'pt'}`
+3. Add "implicit" locales as fallbacks:
+   - `{'en-us' => 'en-US', 'en' => 'en-US', 'pt-br' => 'pt-BR', 'ja-jp' => 'ja-JP', 'ja' => 'ja-JP',
+     'pt' => 'pt'}`
+   - Note that `en` and `ja` are added as fallbacks for `en-US` and `ja-JP` respectively, but *not*
+     for `pt-BR` because `pt` is already in the list later.
+
+Now to match a user's preferred locales:
+
+1. Start with preferred locales:
+   - `['en-US', 'fr', 'ja-JP', 'en']`
+2. Normalize them to lowercase:
+   - `['en-us', 'fr', 'ja-jp', 'en']`
+3. Add "implicit" locales as fallbacks:
+   - `['en-us', 'fr', 'ja-jp', 'ja', 'en']`
+   - As above, note that `en` is *not* added as a fallback for `en-us` because it is already in the
+     list.
+4. Filter out locales that are not available:
+   - `['en-us', 'ja-jp', 'ja', 'en']`
+5. Convert to the canonical form
+   - `['en-US', 'ja-JP', 'ja-JP', 'en-US']`
+6. Remove duplicates
+   - `['en-US', 'ja-JP']`
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
