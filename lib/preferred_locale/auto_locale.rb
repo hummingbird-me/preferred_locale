@@ -18,7 +18,7 @@ class PreferredLocale
       acceptable = HeaderParser.new(request.env['HTTP_ACCEPT_LANGUAGE']).preferred_locales
       PreferredLocale.new(
         available: I18n.available_locales
-      ).preferred_locale(
+      ).preferred_for(
         locales: acceptable
       )
     end
