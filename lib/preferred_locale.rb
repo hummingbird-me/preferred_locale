@@ -15,7 +15,7 @@ class PreferredLocale
       obj[locale_str.downcase] = locale
       # Add the language without a country if it's not already in the list
       language = locale_str.downcase.split('-')[0]
-      obj[language] = locale unless available_lower.include?(language)
+      obj[language] = locale unless available_lower.include?(language) || obj.key?(language)
     end
   end
 
